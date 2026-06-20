@@ -1,0 +1,84 @@
+{% comment %}
+  Product Info Popup with add to cart
+{% endcomment %}
+
+<div class="popup-overlay " id="productPopup-{{ product.id }}">
+  <div class="popup-content">
+    <button class="popup-close" data-product-id="{{ product.id }}">
+      <img
+        src="https://cdn.shopify.com/s/files/1/0637/0836/4884/files/crossTime.png?v=1748579846"
+        alt="close btn"
+        width=""
+        height=""
+      >
+    </button>
+    <div id="popupContent">
+      <div class="pop-content-wrapper">
+        {% if product.featured_image %}
+          <img
+            src="{{ product.featured_image | image_url: width: 200 }}"
+            width=""
+            height=""
+            alt="{{ product.title }}"
+            class="pop-product-image"
+          >
+        {% endif %}
+        <div class="product-info">
+          <h3 class="product-title">{{ product.title }}</h3>
+          <h5 class="popup-product-price " id="variant-Price-{{ product.id }}">
+            {{ product.price | money_with_currency }}
+          </h5>
+          <div class="popup-product-description">{{ product.description }}</div>
+        </div>
+      </div>
+      <div class="variant-box">
+        {% if product.variants.size > 1 %}
+          {% for option in product.options_with_values %}
+            {% comment %} for Color variant {% endcomment %}
+            {% if option.name == 'Color' %}
+              <div class="variant-section color-variant">
+                <p>Color</p>
+                <div class="color-swatches" data-product-id="{{ product.id }}">
+                  {% for value in option.values %}
+                    <div
+                      class="color-swatch"
+                      data-value="{{ value |escape }}"
+                      data-option="Color"
+                      style="border-left:6px solid {{ value | escape }}"
+                    >
+                      {{ value }}
+                    </div>
+                  {% endfor %}
+                </div>
+              </div>
+            {% endif %}
+            {% comment %} for Size variant {% endcomment %}
+            {% if option.name == 'Size' %}
+              <div class="variant-section size-variant">
+                <p>Size</p>
+                <div class="custom-dropdown" data-product-id="{{ product.id }}">
+                  <div class="selected-option">--Choose your size--</div>
+                  <div class="options">
+                    {% for value in option.values %}
+                      <div class="option" data-value="{{ value | escape }}" data-option="Size">{{ value }}</div>
+                    {% endfor %}
+                  </div>
+                </div>
+              </div>
+            {% endif %}
+          {% endfor %}
+        {% endif %}
+      </div>
+      <button class="add-to-cart-btn" data-product-id="{{ product.id }}">
+        Add to cart
+        <img
+          src="https://cdn.shopify.com/s/files/1/0637/0836/4884/files/Line_15.png?v=1748579846"
+          width="24"
+          height="24"
+          alt="add to cart button icon"
+          class="button_arrow_icon"
+        >
+      </button>
+    </div>
+  </div>
+</div>

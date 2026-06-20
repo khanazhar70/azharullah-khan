@@ -1,0 +1,129 @@
+<section class="banner_Section">
+  <div class="banner_section_wrapper">
+    <div class="banner_container">
+      <div class="banner_content">
+        <h1 class="banner_title">{{ section.settings.inline }}</h1>
+        <div class="banner_descriptoin">{{ section.settings.paragraph }}</div>
+        {% if section.settings.button_link %}
+          <a href="{{ section.settings.button_link }}" class="button_black desktop_visible">
+            {{ section.settings.button_title }}
+            <img
+              src="{{ section.settings.arrow_icon | image_url: width:24}}"
+              alt="{{ section.settings.arrow_icon }}"
+              width=""
+              height=""
+            >
+          </a>
+        {% endif %}
+      </div>
+      {% comment %}  Desktop Image REnder {% endcomment %}
+      <div class="banner_image_container">
+        {% if section.settings.image_with_text_desktop %}
+          <img
+            src="{{ section.settings.image_with_text_desktop | image_url: width: 1920  }}"
+            alt=""
+            width=""
+            height=""
+            class="banner_image desktop_image"
+          >
+        {% else %}
+          <img
+            src="https://cdn.shopify.com/s/files/1/0637/0836/4884/files/bannerdesktop.png?v=1748606164"
+            alt=""
+            class="banner_image desktop_image"
+            width="1920"
+            height="780"
+          >
+        {% endif %}
+        {% comment %}  Mobile Image REnder {% endcomment %}
+        {% if section.settings.image_with_text_mobile %}
+          <img
+            src="{{ section.settings.image_with_text_mobile | image_url: width: 768  }}"
+            alt=""
+            width=""
+            height=""
+            class="banner_image mobile_image"
+          >
+
+        {% else %}
+          <img
+            src="https://cdn.shopify.com/s/files/1/0637/0836/4884/files/bannermobile.png?v=1748606163"
+            alt=""
+            width=""
+            height=""
+            class="banner_image mobile_image"
+          >
+        {% endif %}
+      </div>
+
+      {% comment %} Mobile button visible only mobile  {% endcomment %}
+
+      {% if section.settings.button_link %}
+        <a href="{{ section.settings.button_link }}" class="button_black mobile_visible">
+          {{ section.settings.button_title }}
+          <img
+            src="{{ section.settings.arrow_icon | image_url: width:24}}"
+            alt="{{ section.settings.arrow_icon }}"
+            width=""
+            height=""
+          >
+        </a>
+      {% endif %}
+    </div>
+  </div>
+  <div class="bottom_text">{{ section.settings.bottom_text }}</div>
+</section>
+
+{% schema %}
+  {
+    "name": "Banner Section",
+    "settings": [
+       {
+        "type": "image_picker",
+        "id": "image_with_text_desktop",
+        "label": "Desktop Image"
+      },
+      {
+        "type": "image_picker",
+        "id": "image_with_text_mobile",
+        "label": "Mobile Image"
+      },
+      {
+        "type": "inline_richtext",
+        "id": "inline",
+        "default": "Banner Title",
+        "label": "Banner Headiing"
+      },
+      {
+        "type": "richtext",
+        "id": "paragraph",
+        "label": "Paragraph"
+      },
+      {
+        "type": "text",
+        "id": "button_title",
+        "label": "Button Text",
+        "default": "Button Text"
+      },
+      {
+        "type": "url",
+        "id": "button_link",
+        "label": "Button link"
+      },
+      {
+        "type": "image_picker",
+        "id": "arrow_icon",
+        "label": "Button Icon"
+      },
+      {
+  "type": "text",
+  "id": "bottom_text",
+  "label": "Bottom Text",
+  "default": "SUSTAINABLE, ETHICALLY MADE CLOTHES IN SIZES XXS TO 6XL"
+}
+    ],
+    "presets":[{
+      "name": "Banner Section"
+    }]
+  }
+{% endschema %}
