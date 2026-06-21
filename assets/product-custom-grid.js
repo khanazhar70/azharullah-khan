@@ -1,4 +1,3 @@
-console.log("product-custom-grid");
 
 document.addEventListener("DOMContentLoaded", function () {
   // Store selected variants for each product
@@ -104,7 +103,7 @@ document.addEventListener("DOMContentLoaded", function () {
       `[product-data-id="${productId}"]`
     );
     const variants = JSON.parse(productElement.dataset.variants);
-    let selectedVariant = variants.find(
+    let selectedVariant = variants.find(      
       (v) =>
         (v.option1 === selectedOptions.Color &&
           v.option2 === selectedOptions.Size) ||
