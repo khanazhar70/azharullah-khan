@@ -261,6 +261,7 @@ img.pop-product-image {
 }
 .color-swatches {
   display: flex;
+  gap: 10px;
 }
 .color-swatch {
   font-size: 18px;
@@ -272,9 +273,7 @@ img.pop-product-image {
   flex: 1;
   padding: 5px 14px;
 }
-.color-swatch:nth-child(1) {
-  border-right: none !important;
-}
+
 .color-swatch:hover {
   background: #000;
   color: #fff;
