@@ -1,1 +1,86 @@
-{"sections":{"banner_section_zdyGFk":{"type":"banner-section","name":"Banner Section","settings":{"inline":"The Gift Guide","paragraph":"<p>Discover Joy: Your Ultimate Holiday Gift Destination. Explore our curated selection and find the perfect gifts to delight your loved ones this holiday season.<\/p>","button_title":"Shop Now","button_link":"shopify:\/\/products\/dark-denim-top","arrow_icon":"shopify:\/\/shop_images\/Line_15.png","bottom_text":"SUSTAINABLE, ETHICALLY MADE CLOTHES IN SIZES XXS TO 6XL"}},"product_custom_grid_jJ8kG9":{"type":"product-custom-grid","blocks":{"product_HYWAyC":{"type":"product","settings":{"product":"black-leather-bag"}},"product_zthYWL":{"type":"product","settings":{"product":"blue-silk-tuxedo"}},"product_wq3z4x":{"type":"product","settings":{"product":"chequered-red-shirt"}},"product_awXGYC":{"type":"product","settings":{"product":"classic-leather-jacket"}},"product_dhGhkR":{"type":"product","settings":{"product":"classic-varsity-top"}},"product_z3A3kn":{"type":"product","settings":{"product":"dark-denim-top"}}},"block_order":["product_HYWAyC","product_zthYWL","product_wq3z4x","product_awXGYC","product_dhGhkR","product_z3A3kn"],"name":"Product Custom Grid","settings":{"inline":"Tisso vison in the wild","padding_top":64,"padding_bottom":68}}},"order":["banner_section_zdyGFk","product_custom_grid_jJ8kG9"]}
+/*
+ * ------------------------------------------------------------
+ * IMPORTANT: The contents of this file are auto-generated.
+ *
+ * This file may be updated by the Shopify admin theme editor
+ * or related systems. Please exercise caution as any changes
+ * made to this file may be overwritten.
+ * ------------------------------------------------------------
+ */
+{
+  "sections": {
+    "banner_section_zdyGFk": {
+      "type": "banner-section",
+      "name": "Banner Section",
+      "settings": {
+        "image_with_text_desktop": "shopify://shop_images/bannerdesktop.webp",
+        "image_with_text_mobile": "shopify://shop_images/bannermobile.webp",
+        "inline": "The Gift Guide",
+        "paragraph": "<p>Discover Joy: Your Ultimate Holiday Gift Destination. Explore our curated selection and find the perfect gifts to delight your loved ones this holiday season.</p>",
+        "button_title": "Shop Now",
+        "button_link": "shopify://products/dark-denim-top",
+        "arrow_icon": "shopify://shop_images/arrow.svg",
+        "bottom_text": "SUSTAINABLE, ETHICALLY MADE CLOTHES IN SIZES XXS TO 6XL"
+      }
+    },
+    "product_custom_grid_jJ8kG9": {
+      "type": "product-custom-grid",
+      "blocks": {
+        "product_HYWAyC": {
+          "type": "product",
+          "settings": {
+            "product": "black-leather-bag"
+          }
+        },
+        "product_zthYWL": {
+          "type": "product",
+          "settings": {
+            "product": "blue-silk-tuxedo"
+          }
+        },
+        "product_wq3z4x": {
+          "type": "product",
+          "settings": {
+            "product": "chequered-red-shirt"
+          }
+        },
+        "product_awXGYC": {
+          "type": "product",
+          "settings": {
+            "product": "classic-leather-jacket"
+          }
+        },
+        "product_dhGhkR": {
+          "type": "product",
+          "settings": {
+            "product": "classic-varsity-top"
+          }
+        },
+        "product_z3A3kn": {
+          "type": "product",
+          "settings": {
+            "product": "dark-denim-top"
+          }
+        }
+      },
+      "block_order": [
+        "product_HYWAyC",
+        "product_zthYWL",
+        "product_wq3z4x",
+        "product_awXGYC",
+        "product_dhGhkR",
+        "product_z3A3kn"
+      ],
+      "name": "Product Custom Grid",
+      "settings": {
+        "inline": "Tisso vison in the wild",
+        "padding_top": 64,
+        "padding_bottom": 68
+      }
+    }
+  },
+  "order": [
+    "banner_section_zdyGFk",
+    "product_custom_grid_jJ8kG9"
+  ]
+}
