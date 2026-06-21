@@ -170,6 +170,7 @@ div.bottom_text {
   gap: 20px;
 }
 .product_grid_item {
+  cursor: pointer;
   min-height: 440px;
 }
 .product_grid_item img {
