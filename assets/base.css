@@ -99,6 +99,9 @@ body:has(.section-header .drawer-menu) .announcement-bar-section .page-width {
   padding-left: 3rem;
   padding-right: 3rem;
 }
+.button_black img {
+    max-width: 30px;
+}
 
 @media screen and (min-width: 750px) {
   .page-width {
