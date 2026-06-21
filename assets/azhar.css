@@ -48,25 +48,10 @@ a.btn.primary_btn_yellow {
   z-index: 2;
 }
 
-a.btn.primary_btn_yellow::before {
-  content: "";
-  position: absolute;
-  top: -100%;
-  left: 0;
-  width: 100%;
-  height: 100%;
-  background: #000;
-  color: #fff;
-  transition: top 0.3s ease;
-  z-index: -1;
-}
-
-a.btn.primary_btn_yellow:hover::before {
-  top: 0;
-}
 
 a.btn.primary_btn_yellow:hover {
   color: #fff;
+  background-color: #000;
 }
 
 a.btn.primary_btn_yellow:hover img {
