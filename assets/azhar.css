@@ -110,7 +110,6 @@ a.button_black.mobile_visible {
 }
 .banner_image_container img {
   width: 100%;
-  height: 100%;
 }
 .banner_image_container .mobile_image {
   display: none;
