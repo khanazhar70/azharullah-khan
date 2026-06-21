@@ -14,6 +14,7 @@
       "name": "Banner Section",
       "settings": {
         "image_with_text_desktop": "shopify://shop_images/bannerdesktop.webp",
+        "image_with_text_mobile": "shopify://shop_images/bannermobile.webp",
         "inline": "The Gift Guide",
         "paragraph": "<p>Discover Joy: Your Ultimate Holiday Gift Destination. Explore our curated selection and find the perfect gifts to delight your loved ones this holiday season.</p>",
         "button_title": "Shop Now",
