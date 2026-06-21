@@ -151,7 +151,7 @@ a.button_black {
   margin-top: 10px;
   position: relative;
   overflow: hidden;
-  transition: color 0.3s ease;
+  transition: all 0.5s ease;
   z-index: 2;
   cursor: pointer;
 }
