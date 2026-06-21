@@ -177,7 +177,12 @@ div.bottom_text {
   object-fit: cover;
   width: 100%;
   height: 100%;
+.product_grid_item:hover img {
   display: block;
+}
+
+.product_grid_item:hover img {
+  transform: scale(1.1);
 }
 
 .popup-overlay {
