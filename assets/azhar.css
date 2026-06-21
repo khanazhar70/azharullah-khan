@@ -95,7 +95,7 @@ a.button_black.mobile_visible {
   display: none;
 }
 .banner_section_wrapper {
-  min-height: 80vh;
+  min-height: 75vh;
   /* display: flex;
     align-items: center; */
   position: relative;
