@@ -512,7 +512,7 @@ MEDIA QUERIES CSS
   }
   .banner_content {
     position: static;
-    padding: 50px 60px 0 50px;
+    padding: 20px;
     max-width: 100%;
     text-align: center;
     align-items: center;
