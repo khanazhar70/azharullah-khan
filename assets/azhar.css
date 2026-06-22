@@ -536,6 +536,7 @@ MEDIA QUERIES CSS
     gap: 10px;
     justify-content: center;
     width: 60%;
+    margin: auto;
   }
   img.banner_image.mobile_image {
     display: block;
