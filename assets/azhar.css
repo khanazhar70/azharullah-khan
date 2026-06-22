@@ -261,7 +261,6 @@ img.pop-product-image {
 }
 .color-swatches {
   display: flex;
-  gap: 10px;
 }
 .color-swatch {
   font-size: 18px;
@@ -287,10 +286,10 @@ img.pop-product-image {
   position: absolute;
   background: transparent;
   border: 1px solid #000;
-  top: 0;
+  top: -1px;
   left: -6px;
   width: 6px;
-  height: 100%;
+  height: calc(100% + 2px);
 }
 .variant-section.color-variant p,
 .variant-section.size-variant p {
