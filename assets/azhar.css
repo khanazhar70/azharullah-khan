@@ -531,13 +531,11 @@ MEDIA QUERIES CSS
   }
   a.button_black.mobile_visible {
     display: flex;
-    position: absolute;
+    position: static;
     bottom: 75px;
-    left: 50%;
     gap: 10px;
-    justify-content: space-between;
+    justify-content: center;
     width: 60%;
-    transform: translateX(-50%);
   }
   img.banner_image.mobile_image {
     display: block;
