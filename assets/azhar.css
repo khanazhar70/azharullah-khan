@@ -548,7 +548,7 @@ MEDIA QUERIES CSS
     padding: 0 20px !important;
   }
   .product_grid_wrapper {
-    gap: 10px;
+    gap: 10px; 
   }
   .product_grid_item {
     min-height: 190px;
