@@ -1,254 +1,273 @@
+document.addEventListener("DOMContentLoaded", () => {
+  const state = {
+    selectedVariants: {},
+  };
 
-document.addEventListener("DOMContentLoaded", function () {
-  // Store selected variants for each product
-  window.selectedVariants = {};
+  /* -----------------------------
+     Utilities
+  ----------------------------- */
 
-  // Initialize all functionality
-  initCustomDropdowns();
-  initColorSwatches();
-  initAddToCart();
-  initCloseButtons();
+  const $ = (selector, scope = document) => scope.querySelector(selector);
+  const $$ = (selector, scope = document) =>
+    Array.from(scope.querySelectorAll(selector));
 
-  function initCloseButtons() {
-    document.querySelectorAll(".popup-close").forEach((button) => {
-      button.addEventListener("click", (e) => {
-        e.preventDefault();
-        closeProductPopup();
-      });
-    });
-  }
+  const getProductEl = (productId) =>
+    $(`[product-data-id="${productId}"]`);
 
-  function initCustomDropdowns() {
-    document.querySelectorAll(".custom-dropdown").forEach((dropdown) => {
-      const selectedOption = dropdown.querySelector(".selected-option");
-      const productId = dropdown.dataset.productId;
+  const getVariants = (productId) =>
+    JSON.parse(getProductEl(productId)?.dataset.variants || "[]");
 
-      selectedOption.addEventListener("click", (e) => {
+  const getSelectedOptions = (productId) =>
+    state.selectedVariants[productId] || {};
+
+  const setSelectedOption = (productId, key, value) => {
+    state.selectedVariants[productId] ??= {};
+    state.selectedVariants[productId][key] = value;
+  };
+
+  /* -----------------------------
+     Dropdowns
+  ----------------------------- */
+
+  function initDropdowns() {
+    $$(".custom-dropdown").forEach((dropdown) => {
+      const { productId } = dropdown.dataset;
+      const selected = $(".selected-option", dropdown);
+
+      selected.addEventListener("click", (e) => {
         e.stopPropagation();
-        document
-          .querySelectorAll(".custom-dropdown")
-          .forEach((d) => d.classList.remove("active"));
+        closeAllDropdowns();
         dropdown.classList.toggle("active");
       });
 
-      dropdown.querySelectorAll(".option").forEach((option) => {
+      $$(".option", dropdown).forEach((option) => {
         option.addEventListener("click", (e) => {
           e.stopPropagation();
-          selectedOption.textContent = option.dataset.value;
-          selectedOption.classList.add("selected");
+          selected.textContent = option.dataset.value;
+          selected.classList.add("selected");
           dropdown.classList.remove("active");
 
-          if (!window.selectedVariants[productId])
-            window.selectedVariants[productId] = {};
-          window.selectedVariants[productId][option.dataset.option] =
-            option.dataset.value;
+          setSelectedOption(
+            productId,
+            option.dataset.option,
+            option.dataset.value
+          );
 
           clearError(productId);
-          updateVariantPrice(productId);
+          updatePrice(productId);
         });
       });
     });
 
-    document.addEventListener("click", () => {
-      document
-        .querySelectorAll(".custom-dropdown")
-        .forEach((d) => d.classList.remove("active"));
-    });
+    document.addEventListener("click", closeAllDropdowns);
   }
 
+  const closeAllDropdowns = () =>
+    $$(".custom-dropdown").forEach((d) => d.classList.remove("active"));
+
+  /* -----------------------------
+     Color Swatches
+  ----------------------------- */
+
   function initColorSwatches() {
-    document.querySelectorAll(".color-swatch").forEach((swatch) => {
+    $$(".color-swatch").forEach((swatch) => {
       swatch.addEventListener("click", (e) => {
         e.stopPropagation();
-        const productId = swatch.closest(".color-swatches").dataset.productId;
+        const wrapper = swatch.closest(".color-swatches");
+        const { productId } = wrapper.dataset;
 
-        swatch.parentElement
-          .querySelectorAll(".color-swatch")
-          .forEach((s) => s.classList.remove("color-active"));
+        $$(".color-swatch", wrapper).forEach((s) =>
+          s.classList.remove("color-active")
+        );
         swatch.classList.add("color-active");
 
-        if (!window.selectedVariants[productId])
-          window.selectedVariants[productId] = {};
-        window.selectedVariants[productId][swatch.dataset.option] =
-          swatch.dataset.value;
+        setSelectedOption(
+          productId,
+          swatch.dataset.option,
+          swatch.dataset.value
+        );
 
         clearError(productId);
-        updateVariantPrice(productId);
+        updatePrice(productId);
       });
     });
   }
 
+  /* -----------------------------
+     Add To Cart
+  ----------------------------- */
+
   function initAddToCart() {
-    document.querySelectorAll(".add-to-cart-btn").forEach((button) => {
-      button.addEventListener("click", () =>
-        handleAddToCart(button.dataset.productId)
-      );
-    });
+    $$(".add-to-cart-btn").forEach((btn) =>
+      btn.addEventListener("click", () =>
+        handleAddToCart(btn.dataset.productId)
+      )
+    );
   }
 
   async function handleAddToCart(productId) {
-    const button = document.querySelector(
-      `[data-product-id="${productId}"].add-to-cart-btn`
+    const button = $(
+      `.add-to-cart-btn[data-product-id="${productId}"]`
     );
-    const selectedOptions = window.selectedVariants[productId] || {};
+    const options = getSelectedOptions(productId);
 
-    // Validate selections
-    if (!selectedOptions.Color)
-      return showError(productId, "Please select a color");
-    if (!selectedOptions.Size)
-      return showError(productId, "Please select a size");
+    if (!options.Color) return showError(productId, "Please select a color");
+    if (!options.Size) return showError(productId, "Please select a size");
 
-    // Find variant
-    const productElement = document.querySelector(
-      `[product-data-id="${productId}"]`
-    );
-    const variants = JSON.parse(productElement.dataset.variants);
-    let selectedVariant = variants.find(      
-      (v) =>
-        (v.option1 === selectedOptions.Color &&
-          v.option2 === selectedOptions.Size) ||
-        (v.option1 === selectedOptions.Size &&
-          v.option2 === selectedOptions.Color)
-    );
+    const variant = findVariant(productId, options);
 
-    if (!selectedVariant)
+    if (!variant)
       return showError(productId, "Selected combination not available");
-    if (!selectedVariant.available)
+    if (!variant.available)
       return showError(productId, "Variant out of stock");
 
-    // Prepare items to add - MAIN CHANGE IS HERE
-    const itemsToAdd = [{ id: selectedVariant.id, quantity: 1 }];
+    const items = buildCartItems(variant, options);
 
-    // Only add extra product if color is Black and size is M
-    const isBlackAndM =
-      selectedOptions.Color.toLowerCase() === "black" &&
-      selectedOptions.Size.toUpperCase() === "M";
-
-    if (isBlackAndM) {
-      itemsToAdd.push({ id: 42121310928980, quantity: 1 }); // Add the extra product
-    }
-
-    // Add to cart
-    button.disabled = true;
-    button.textContent = "Adding...";
+    toggleButton(button, true);
 
     try {
-      for (const item of itemsToAdd) {
-        const response = await fetch("/cart/add.js", {
-          method: "POST",
-          headers: { "Content-Type": "application/json" },
-          body: JSON.stringify(item),
-        });
-        const data = await response.json();
-        if (data.status === 422) throw new Error(data.description);
-      }
-
+      await addItemsToCart(items);
       closeProductPopup();
-      alert(`Product added to cart${isBlackAndM ? " with bonus item" : ""}!`);
       updateCartCount();
-    } catch (error) {
-      showError(productId, error.message || "Failed to add to cart");
+      alert(
+        `Product added to cart${
+          items.length > 1 ? " with bonus item" : ""
+        }!`
+      );
+    } catch (err) {
+      showError(productId, err.message || "Add to cart failed");
     } finally {
-      button.disabled = false;
-      button.textContent = "Add to Cart";
+      toggleButton(button, false);
     }
   }
 
-  function showError(productId, message) {
-    const errorElement = document.getElementById(`error-${productId}`);
-    errorElement.textContent = message;
-    errorElement.style.display = "block";
-  }
+  /* -----------------------------
+     Variant & Cart Helpers
+  ----------------------------- */
 
-  function clearError(productId) {
-    const errorElement = document.getElementById(`error-${productId}`);
-    errorElement.style.display = "none";
-  }
-
-  function updateVariantPrice(productId) {
-    const selectedOptions = window.selectedVariants[productId] || {};
-    if (!selectedOptions.Color || !selectedOptions.Size) return;
-
-    const productElement = document.querySelector(
-      `[product-data-id="${productId}"]`
-    );
-    const variants = JSON.parse(productElement.dataset.variants);
-    const variant = variants.find(
+  const findVariant = (productId, options) =>
+    getVariants(productId).find(
       (v) =>
-        (v.option1 === selectedOptions.Color &&
-          v.option2 === selectedOptions.Size) ||
-        (v.option1 === selectedOptions.Size &&
-          v.option2 === selectedOptions.Color)
+        [v.option1, v.option2].includes(options.Color) &&
+        [v.option1, v.option2].includes(options.Size)
     );
 
-    const priceElement = document.getElementById(`variantPrice-${productId}`);
-    if (variant && priceElement) {
-      priceElement.textContent = `${(variant.price / 100).toFixed(2)}`;
+  const buildCartItems = (variant, options) => {
+    const items = [{ id: variant.id, quantity: 1 }];
+
+    const isBlackM =
+      options.Color.toLowerCase() === "black" &&
+      options.Size.toUpperCase() === "M";
+
+    if (isBlackM) {
+      items.push({ id: 42121310928980, quantity: 1 });
+    }
+
+    return items;
+  };
+
+  const addItemsToCart = async (items) => {
+    for (const item of items) {
+      const res = await fetch("/cart/add.js", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify(item),
+      });
+      const data = await res.json();
+      if (data.status === 422) throw new Error(data.description);
+    }
+  };
+
+  const toggleButton = (btn, loading) => {
+    btn.disabled = loading;
+    btn.textContent = loading ? "Adding..." : "Add to Cart";
+  };
+
+  /* -----------------------------
+     UI Updates
+  ----------------------------- */
+
+  function updatePrice(productId) {
+    const options = getSelectedOptions(productId);
+    if (!options.Color || !options.Size) return;
+
+    const variant = findVariant(productId, options);
+    const priceEl = $(`#variantPrice-${productId}`);
+
+    if (variant && priceEl) {
+      priceEl.textContent = (variant.price / 100).toFixed(2);
     }
   }
 
   function updateCartCount() {
     fetch("/cart.js")
-      .then((res) => res.json())
-      .then((cart) => {
-        document
-          .querySelectorAll(".cart-count")
-          .forEach((el) => (el.textContent = cart.item_count));
-      })
-      .catch(console.error);
-  }
-
-  function resetSelections(productId) {
-    delete window.selectedVariants[productId];
-    document
-      .querySelectorAll(
-        `.color-swatches[data-product-id="${productId}"] .color-swatch`
-      )
-      .forEach((s) => s.classList.remove("color-active"));
-
-    const dropdown = document.querySelector(
-      `.custom-dropdown[data-product-id="${productId}"]`
-    );
-    if (dropdown) {
-      const selectedOption = dropdown.querySelector(".selected-option");
-      if (selectedOption) {
-        selectedOption.textContent = "Select your size";
-        selectedOption.classList.remove("selected");
-      }
-    }
-
-    clearError(productId);
-    const priceElement = document.getElementById(`variantPrice-${productId}`);
-    if (priceElement) {
-      const variants = JSON.parse(
-        document.querySelector(`[product-data-id="${productId}"]`).dataset
-          .variants
+      .then((r) => r.json())
+      .then((cart) =>
+        $$(".cart-count").forEach(
+          (el) => (el.textContent = cart.item_count)
+        )
       );
-      if (variants[0])
-        priceElement.textContent = `$${(variants[0].price / 100).toFixed(2)}`;
-    }
   }
 
-  window.resetSelections = resetSelections;
-  window.closeProductPopup = () => {
-    document.querySelector(".popup-overlay.active")?.classList.remove("active");
-    document.body.style.overflow = "";
-    document
-      .querySelectorAll(".custom-dropdown")
-      .forEach((d) => d.classList.remove("active"));
-  };
+  function showError(productId, msg) {
+    const el = $(`#error-${productId}`);
+    el.textContent = msg;
+    el.style.display = "block";
+  }
+
+  function clearError(productId) {
+    const el = $(`#error-${productId}`);
+    el.style.display = "none";
+  }
+
+  /* -----------------------------
+     Popup Controls
+  ----------------------------- */
 
   window.openProductPopup = (productId) => {
-    const popup = document.getElementById(`productPopup-${productId}`);
-    if (popup) {
-      popup.classList.add("active");
-      document.body.style.overflow = "hidden";
-      resetSelections(productId);
-    }
-  };
-});
+    const popup = $(`#productPopup-${productId}`);
+    if (!popup) return;
 
-// Event listeners for popup closing
-document.addEventListener("click", (e) => {
-  if (e.target.classList.contains("popup-overlay")) window.closeProductPopup();
+    popup.classList.add("active");
+    document.body.style.overflow = "hidden";
+    resetSelections(productId);
+  };
+
+  window.closeProductPopup = () => {
+    $(".popup-overlay.active")?.classList.remove("active");
+    document.body.style.overflow = "";
+    closeAllDropdowns();
+  };
+
+  function resetSelections(productId) {
+    delete state.selectedVariants[productId];
+    clearError(productId);
+
+    $(
+      `.custom-dropdown[data-product-id="${productId}"] .selected-option`
+    )?.classList.remove("selected");
+
+    $(
+      `.custom-dropdown[data-product-id="${productId}"] .selected-option`
+    ).textContent = "Select your size";
+
+    $(
+      `.color-swatches[data-product-id="${productId}"]`
+    )?.querySelectorAll(".color-swatch")
+      .forEach((s) => s.classList.remove("color-active"));
+  }
+
+  document.addEventListener("click", (e) => {
+    if (e.target.classList.contains("popup-overlay")) {
+      window.closeProductPopup();
+    }
+  });
+
+  /* -----------------------------
+     Init
+  ----------------------------- */
+
+  initDropdowns();
+  initColorSwatches();
+  initAddToCart();
 });
