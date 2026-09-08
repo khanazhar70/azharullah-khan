@@ -238,7 +238,7 @@ document.addEventListener("DOMContentLoaded", function () {
       .querySelectorAll(".custom-dropdown")
       .forEach((d) => d.classList.remove("active"));
   };
-
+// globally accessible functions
   window.openProductPopup = (productId) => {
     const popup = document.getElementById(`productPopup-${productId}`);
     if (popup) {
