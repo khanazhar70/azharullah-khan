@@ -128,7 +128,7 @@ console.log("Selected Size:", selectedOptions.Size);
       selectedOptions.Size.toUpperCase() === "M";
 
     if (isBlackAndM) {
-      itemsToAdd.push({ id: 9114779910282, quantity: 1 }); // Add the extra product
+      itemsToAdd.push({ id: 49556109197450, quantity: 1 }); // Add the extra product
     }
 
     // Add to cart , disable button to prevent multiclick
