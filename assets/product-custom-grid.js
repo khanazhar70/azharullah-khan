@@ -126,7 +126,7 @@ document.addEventListener("DOMContentLoaded", function () {
       selectedOptions.Size.toUpperCase() === "M";
 
     if (isBlackAndM) {
-      itemsToAdd.push({ id: 42121310928980, quantity: 1 }); // Add the extra product
+      itemsToAdd.push({ id: 9114779910282, quantity: 1 }); // Add the extra product
     }
 
     // Add to cart , disable button to prevent multiclick
