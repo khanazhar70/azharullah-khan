@@ -121,6 +121,8 @@ document.addEventListener("DOMContentLoaded", function () {
     const itemsToAdd = [{ id: selectedVariant.id, quantity: 1 }];
 
     // Only add extra product if color is Black and size is M
+    console.log("Selected Color:", selectedOptions.Color);
+console.log("Selected Size:", selectedOptions.Size);
     const isBlackAndM =
       selectedOptions.Color.toLowerCase() === "black" &&
       selectedOptions.Size.toUpperCase() === "M";
